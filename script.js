@@ -17,13 +17,15 @@ const  btnDiv = document.getElementById("btnDiv");
 const  btnPoint = document.getElementById("btnPoint");
 const  btnEqual = document.getElementById("btnEqual");
 const  display = document.getElementById("display");
-let operator = "";
+
+let currentOperator = "";
+let previousOperator = "";
 let previuosNumber = "";
 let currentNumber = "";
 
 btn1.onclick = function(){
     currentNumber = currentNumber + "1"
-    display.textContent = currentNumber;
+    display.textContent = currentNumber;    
 }
 
 btn2.onclick = function(){
@@ -72,13 +74,18 @@ btn0.onclick = function(){
 }
 
 btnPoint.onclick = function(){
-    currentNumber = currentNumber + "."
-    display.textContent = currentNumber;
+    if (currentNumber.includes('.')) {
+        this.removeAttributeNS;
+    } else {
+        currentNumber = currentNumber + "."
+        display.textContent = currentNumber;
+    }
 }
 
 btnClear.onclick = function(){
     previuosNumber = "";
     currentNumber = "";
+    currentOperator = "";    
     display.textContent = currentNumber;
 }
 
@@ -87,41 +94,86 @@ btnDelete.onclick = function(){
     display.textContent = currentNumber;
 }
 
-btnAdd.onclick = function(){
-    operator = '+';
-    previuosNumber = currentNumber;
-    currentNumber = '';
+function add (a, b) {
+    return a + b;
 }
 
-btnSub.onclick = function(){
-    operator = '-';
-    previuosNumber = currentNumber;
-    currentNumber = '';
+function subtract (a, b) {
+    return a - b;
 }
 
-btnMult.onclick = function(){
-    operator = '*';
-    previuosNumber = currentNumber;
-    currentNumber = '';
+function multiply (a, b) {
+    return a * b;
 }
 
-btnDiv.onclick = function(){
-    operator = '/';
-    previuosNumber = currentNumber;
-    currentNumber = '';
+function divide (a, b) {
+    return a / b;
 }
 
-btnEqual.onclick = function(){
-    if (operator == '+') {
-        currentNumber = parseFloat(currentNumber) + parseFloat(previuosNumber);        
-    } else if (operator == '-' && previuosNumber !== '') {
-        currentNumber = parseFloat(previuosNumber) - parseFloat(currentNumber);
-    } else if (operator == '-') {
-        currentNumber = - parseFloat(currentNumber);
-    } else if (operator == '*') {
-        currentNumber = parseFloat(currentNumber) * parseFloat(previuosNumber)
-    } else if (operator == '/') {
-        currentNumber = parseFloat(previuosNumber) / parseFloat(currentNumber);
+btnEqual.onclick = function() {
+    if (currentNumber == '' || previuosNumber == '') {
+        return
+    } else {
+        currentNumber = calculate(previuosNumber, currentNumber, currentOperator)
     }
+    currentOperator = ''
     display.textContent = currentNumber;
+    previuosNumber = ''
+}
+
+btnAdd.onclick = function(){
+    if (currentOperator !== '') {
+        currentNumber = calculate(previuosNumber, currentNumber, currentOperator);
+        display.textContent = currentNumber;
+    } 
+    currentOperator = '+'
+    previuosNumber = currentNumber;
+    currentNumber = ''
+}
+
+btnSub.onclick = function() {
+    if (currentOperator !== '') {
+        currentNumber = calculate(previuosNumber, currentNumber, currentOperator);
+        display.textContent = currentNumber;
+    } 
+    currentOperator = '-'
+    previuosNumber = currentNumber;
+    currentNumber = ''
+}
+
+btnMult.onclick = function() {
+    if (currentOperator !== '') {
+        currentNumber = calculate(previuosNumber, currentNumber, currentOperator);
+        display.textContent = currentNumber;
+    } 
+    currentOperator = '*'
+    previuosNumber = currentNumber;
+    currentNumber = ''
+}
+
+btnDiv.onclick = function() {
+    if (currentOperator !== '') {
+        currentNumber = calculate(previuosNumber, currentNumber, currentOperator);
+        display.textContent = currentNumber;
+    } 
+    currentOperator = '/'
+    previuosNumber = currentNumber;
+    currentNumber = ''
+}
+
+
+function calculate (previuosNumber,currentNumber, currentOperator) {
+    if (currentOperator == '+') {
+        currentNumber = add (parseFloat(previuosNumber), parseFloat(currentNumber))  
+        return currentNumber;      
+    } else if (currentOperator == '-') {
+        currentNumber = subtract (parseFloat(previuosNumber),parseFloat(currentNumber))  
+        return currentNumber;      
+    } else if (currentOperator == '*') {
+        currentNumber = multiply (parseFloat(previuosNumber),parseFloat(currentNumber))  
+        return currentNumber;      
+    } else if (currentOperator == '/') {
+        currentNumber = divide (parseFloat(previuosNumber),parseFloat(currentNumber))  
+        return currentNumber;      
+    } 
 }
